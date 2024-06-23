@@ -27,6 +27,9 @@ app.register(createAccount)
 app.register(authenticateWithPassword)
 app.register(getProfile)
 
-app.listen({ port: Number(process.env.PORT) || 3333 }).then(() => {
+const port = Number(process.env.PORT) || 3333;
+const address = '0.0.0.0';
+
+app.listen({ port, host: address }).then(() => {
   console.log('HTTP server running!')
 })
