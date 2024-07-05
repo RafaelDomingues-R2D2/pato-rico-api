@@ -8,9 +8,17 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { errorHandler } from './error-handler'
-import { createAccount } from './routes/_errors/auth/create-account'
-import { authenticateWithPassword } from './routes/_errors/auth/authenticate-with-password'
-import { getProfile } from './routes/_errors/auth/get-profile'
+import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
+import { createAccount } from './routes/auth/create-account'
+import { getProfile } from './routes/auth/get-profile'
+import { createCategory } from './routes/categories/create-category'
+import { getCategories } from './routes/categories/get-categories'
+import { getMonthTransactionIncome } from './routes/metrics/get-month-transaction-income'
+import { getMonthTransactionOutcome } from './routes/metrics/get-month-transaction-outcome'
+import { createTransaction } from './routes/transactions/create-transaction'
+import { getTransactions } from './routes/transactions/get-transactions'
+import { createTypeOfExpense } from './routes/typesOfExpenses/create-type-of-expense'
+import { getTypesOfTransactions } from './routes/typesOfExpenses/get-types-of-expenses'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -26,9 +34,17 @@ app.register(fastifyCors)
 app.register(createAccount)
 app.register(authenticateWithPassword)
 app.register(getProfile)
+app.register(createCategory)
+app.register(createTypeOfExpense)
+app.register(createTransaction)
+app.register(getTransactions)
+app.register(getCategories)
+app.register(getTypesOfTransactions)
+app.register(getMonthTransactionIncome)
+app.register(getMonthTransactionOutcome)
 
-const port = Number(process.env.PORT) || 3333;
-const address = '0.0.0.0';
+const port = Number(process.env.PORT) || 3333
+const address = '0.0.0.0'
 
 app.listen({ port, host: address }).then(() => {
   console.log('HTTP server running!')
