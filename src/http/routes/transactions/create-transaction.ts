@@ -2,8 +2,9 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { db } from '@/db/connection'
+import { transactions } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
 
 enum TransactionType {
   INCOME = 'INCOME',
@@ -52,19 +53,20 @@ export async function createTransaction(app: FastifyInstance) {
 
         const userId = await request.getCurrentUserId()
 
-        const transaction = await prisma.transaction.create({
-          data: {
+        const transaction = await db
+          .insert(transactions)
+          .values({
             name,
-            description: description ?? '',
-            date: new Date(date),
+            description,
+            date,
             type,
-            value,
+            value: String(value),
             paymentForm,
             userId,
             categoryId,
             typeOfExpenseId,
-          },
-        })
+          })
+          .returning()
 
         return reply.status(201).send({
           transaction,

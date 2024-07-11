@@ -1,13 +1,13 @@
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { prisma } from '@/lib/prisma'
+import { db } from '@/db/connection'
 
 export async function getTypesOfTransactions(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
-    .get('/typesOfTransactions', async () => {
-      const typesOfTransactions = await prisma.typeOfExpense.findMany()
+    .get('/types-of-transactions', async () => {
+      const typesOfTransactions = await db.query.typeOfExpenses.findMany()
 
       return { typesOfTransactions }
     })

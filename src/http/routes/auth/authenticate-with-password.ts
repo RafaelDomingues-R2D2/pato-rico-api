@@ -3,7 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
-import { prisma } from '../../../lib/prisma'
+import { db } from '@/db/connection'
+
 import { BadRequestError } from '../_errors/bad-request-error'
 
 export async function authenticateWithPassword(app: FastifyInstance) {
@@ -20,8 +21,10 @@ export async function authenticateWithPassword(app: FastifyInstance) {
     async (request, reply) => {
       const { email, password } = request.body
 
-      const userFromEmail = await prisma.user.findUnique({
-        where: { email },
+      const userFromEmail = await db.query.users.findFirst({
+        where(fields, { eq }) {
+          return eq(fields.email, email)
+        },
       })
 
       if (!userFromEmail) {

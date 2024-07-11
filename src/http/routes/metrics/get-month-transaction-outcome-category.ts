@@ -4,25 +4,32 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { db } from '@/db/connection'
-import { transactions } from '@/db/schema'
+import { categories, transactions } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
-export async function getMonthTransactionOutcome(app: FastifyInstance) {
+interface getMonthTransactionOutcomeCategoryResponse {
+  category: string
+  amount: number
+}
+
+export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .get('/metrics/month-transaction-outcome', async (request) => {
+    .get('/metrics/month-transaction-outcome-category', async (request) => {
       const today = dayjs()
       const lastMonth = today.subtract(0, 'month')
       const startOfLastMonth = lastMonth.startOf('month')
 
       const userId = await request.getCurrentUserId()
 
-      const transactionsPerMonth = await db
+      const query = await db
         .select({
+          category: categories.name,
           amount: sum(transactions.value),
         })
         .from(transactions)
+        .leftJoin(categories, eq(categories.id, transactions.categoryId))
         .where(
           and(
             gte(transactions.createdAt, startOfLastMonth.toDate()),
@@ -30,7 +37,17 @@ export async function getMonthTransactionOutcome(app: FastifyInstance) {
             eq(transactions.userId, userId),
           ),
         )
+        .groupBy(categories.name)
 
-      return { amount: transactionsPerMonth[0].amount ?? 0 }
+      const result: getMonthTransactionOutcomeCategoryResponse[] = []
+
+      query.forEach((q) => {
+        result.push({
+          category: String(q.category),
+          amount: Number(q.amount),
+        })
+      })
+
+      return result
     })
 }

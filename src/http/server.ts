@@ -15,6 +15,8 @@ import { createCategory } from './routes/categories/create-category'
 import { getCategories } from './routes/categories/get-categories'
 import { getMonthTransactionIncome } from './routes/metrics/get-month-transaction-income'
 import { getMonthTransactionOutcome } from './routes/metrics/get-month-transaction-outcome'
+import { getMonthTransactionOutcomeCategory } from './routes/metrics/get-month-transaction-outcome-category'
+import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-month-transaction-outcome-type-of-expense'
 import { createTransaction } from './routes/transactions/create-transaction'
 import { getTransactions } from './routes/transactions/get-transactions'
 import { createTypeOfExpense } from './routes/typesOfExpenses/create-type-of-expense'
@@ -35,13 +37,15 @@ app.register(createAccount)
 app.register(authenticateWithPassword)
 app.register(getProfile)
 app.register(createCategory)
+app.register(getCategories)
 app.register(createTypeOfExpense)
+app.register(getTypesOfTransactions)
 app.register(createTransaction)
 app.register(getTransactions)
-app.register(getCategories)
-app.register(getTypesOfTransactions)
 app.register(getMonthTransactionIncome)
 app.register(getMonthTransactionOutcome)
+app.register(getMonthTransactionOutcomeCategory)
+app.register(getMonthTransactionOutcomeTypeOfExpense)
 
 const port = Number(process.env.PORT) || 3333
 const address = '0.0.0.0'

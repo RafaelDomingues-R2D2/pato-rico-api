@@ -2,15 +2,16 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { db } from '@/db/connection'
+import { typeOfExpenses } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
 
 export async function createTypeOfExpense(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/typesOfExpenses',
+      '/types-of-transactions',
       {
         schema: {
           body: z.object({
@@ -25,14 +26,15 @@ export async function createTypeOfExpense(app: FastifyInstance) {
 
         const userId = await request.getCurrentUserId()
 
-        const typeOfExpense = await prisma.typeOfExpense.create({
-          data: {
+        const typeOfExpense = await db
+          .insert(typeOfExpenses)
+          .values({
             name,
-            description,
-            goalValue,
+            description: description ?? '',
+            goalValue: String(goalValue),
             userId,
-          },
-        })
+          })
+          .returning()
 
         return reply.status(201).send({
           typeOfExpense,

@@ -2,8 +2,9 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
+import { db } from '@/db/connection'
+import { categories } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
-import { prisma } from '@/lib/prisma'
 
 enum CategoryType {
   INCOME = 'INCOME',
@@ -31,15 +32,16 @@ export async function createCategory(app: FastifyInstance) {
 
         const userId = await request.getCurrentUserId()
 
-        const category = await prisma.category.create({
-          data: {
+        const category = await db
+          .insert(categories)
+          .values({
             name,
-            description,
+            description: description ?? '',
             type,
-            goalValue,
+            goalValue: String(goalValue),
             userId,
-          },
-        })
+          })
+          .returning()
 
         return reply.status(201).send({
           category,

@@ -1,11 +1,11 @@
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { prisma } from '@/lib/prisma'
+import { db } from '@/db/connection'
 
 export async function getCategories(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get('/categories', async () => {
-    const categories = await prisma.category.findMany()
+    const categories = await db.query.categories.findMany()
 
     return { categories }
   })
