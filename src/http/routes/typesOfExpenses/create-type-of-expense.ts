@@ -11,7 +11,7 @@ export async function createTypeOfExpense(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/types-of-transactions',
+      '/types-of-expense',
       {
         schema: {
           body: z.object({

@@ -20,7 +20,7 @@ import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-mo
 import { createTransaction } from './routes/transactions/create-transaction'
 import { getTransactions } from './routes/transactions/get-transactions'
 import { createTypeOfExpense } from './routes/typesOfExpenses/create-type-of-expense'
-import { getTypesOfTransactions } from './routes/typesOfExpenses/get-types-of-expenses'
+import { getTypesOfExpense } from './routes/typesOfExpenses/get-types-of-expenses'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -39,7 +39,7 @@ app.register(getProfile)
 app.register(createCategory)
 app.register(getCategories)
 app.register(createTypeOfExpense)
-app.register(getTypesOfTransactions)
+app.register(getTypesOfExpense)
 app.register(createTransaction)
 app.register(getTransactions)
 app.register(getMonthTransactionIncome)

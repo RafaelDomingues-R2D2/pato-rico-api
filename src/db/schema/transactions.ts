@@ -34,7 +34,7 @@ export const transactions = pgTable('transactions', {
   date: date('date').notNull(),
   value: decimal('value').notNull(),
   type: transactionTypeEnum('type').notNull(),
-  paymentForm: paymentFormEnum('payment_form').notNull(),
+  paymentForm: paymentFormEnum('payment_form'),
 
   userId: text('user_id').notNull(),
   categoryId: text('category_id').notNull(),
