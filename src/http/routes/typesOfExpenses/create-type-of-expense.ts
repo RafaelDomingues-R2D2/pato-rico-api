@@ -3,7 +3,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { db } from '@/db/connection'
-import { typeOfExpenses } from '@/db/schema'
+import { typesOfExpenses } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 export async function createTypeOfExpense(app: FastifyInstance) {
@@ -27,7 +27,7 @@ export async function createTypeOfExpense(app: FastifyInstance) {
         const userId = await request.getCurrentUserId()
 
         const typeOfExpense = await db
-          .insert(typeOfExpenses)
+          .insert(typesOfExpenses)
           .values({
             name,
             description: description ?? '',

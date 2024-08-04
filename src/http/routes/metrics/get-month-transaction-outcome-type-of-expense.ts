@@ -4,7 +4,7 @@ import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { db } from '@/db/connection'
-import { transactions, typeOfExpenses } from '@/db/schema'
+import { transactions, typesOfExpenses } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 interface getMonthTransactionOutcomeTypeOfExpenseResponse {
@@ -30,14 +30,14 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
 
         const query = await db
           .select({
-            name: typeOfExpenses.name,
+            name: typesOfExpenses.name,
             amount: sum(transactions.value),
-            goal: typeOfExpenses.goalValue,
+            goal: typesOfExpenses.goalValue,
           })
           .from(transactions)
           .leftJoin(
-            typeOfExpenses,
-            eq(typeOfExpenses.id, transactions.typeOfExpenseId),
+            typesOfExpenses,
+            eq(typesOfExpenses.id, transactions.typeOfExpenseId),
           )
           .where(
             and(
@@ -46,7 +46,7 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
               eq(transactions.userId, userId),
             ),
           )
-          .groupBy(typeOfExpenses.name, typeOfExpenses.goalValue)
+          .groupBy(typesOfExpenses.name, typesOfExpenses.goalValue)
 
         const result: getMonthTransactionOutcomeTypeOfExpenseResponse[] = []
 
