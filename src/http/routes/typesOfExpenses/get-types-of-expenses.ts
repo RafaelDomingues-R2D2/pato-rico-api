@@ -5,7 +5,7 @@ import { db } from '@/db/connection'
 
 export async function getTypesOfExpense(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get('/types-of-expense', async () => {
-    const typesOfExpense = await db.query.typeOfExpenses.findMany()
+    const typesOfExpense = await db.query.typesOfExpenses.findMany()
 
     return { typesOfExpense }
   })

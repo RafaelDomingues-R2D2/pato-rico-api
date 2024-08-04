@@ -4,7 +4,7 @@ import { decimal, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 import { users } from './users'
 
-export const typeOfExpenses = pgTable('typeOfExpenses', {
+export const typesOfExpenses = pgTable('typesOfExpenses', {
   id: text('id')
     .$defaultFn(() => createId())
     .primaryKey(),
@@ -18,10 +18,13 @@ export const typeOfExpenses = pgTable('typeOfExpenses', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
-export const typeOfExpensesRelations = relations(typeOfExpenses, ({ one }) => ({
-  users: one(users, {
-    fields: [typeOfExpenses.userId],
-    references: [users.id],
-    relationName: 'typeOfExpensesUser',
+export const typesOfExpensesRelations = relations(
+  typesOfExpenses,
+  ({ one }) => ({
+    users: one(users, {
+      fields: [typesOfExpenses.userId],
+      references: [users.id],
+      relationName: 'typesOfExpensesUser',
+    }),
   }),
-}))
+)

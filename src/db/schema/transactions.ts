@@ -10,7 +10,7 @@ import {
 } from 'drizzle-orm/pg-core'
 
 import { categories } from './categories'
-import { typeOfExpenses } from './typeOfExpenses'
+import { typesOfExpenses } from './typesOfExpenses'
 import { users } from './users'
 
 export const transactionTypeEnum = pgEnum('transaction_type', [
@@ -50,9 +50,9 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     references: [categories.id],
     relationName: 'transactionCategory',
   }),
-  typeOfexpenses: one(typeOfExpenses, {
+  typeOfexpenses: one(typesOfExpenses, {
     fields: [transactions.typeOfExpenseId],
-    references: [typeOfExpenses.id],
+    references: [typesOfExpenses.id],
     relationName: 'transactionTypeOfExpense',
   }),
   users: one(users, {
