@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file .env src/http/server.ts",
-    "start": "node --env-file .env build/http/server.js",
+    "start": "node build/http/server.js",
     "build": "tsup src --out-dir build",
     "studio": "yarn drizzle-kit studio",
     "generate": "drizzle-kit generate",
