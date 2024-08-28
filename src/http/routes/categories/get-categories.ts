@@ -1,16 +1,42 @@
+import { and, eq } from 'drizzle-orm'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { db } from '@/db/connection'
+import { categories } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 export async function getCategories(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .get('/categories', async () => {
-      const categories = await db.query.categories.findMany()
+    .get(
+      '/categories',
+      {
+        schema: {
+          querystring: z.object({
+            type: z.enum(['INCOME', 'OUTCOME']),
+          }),
+        },
+      },
+      async (request) => {
+        const { type } = request.query
 
-      return { categories }
-    })
+        const userId = await request.getCurrentUserId()
+
+        const result = await db
+          .select({
+            id: categories.id,
+            name: categories.name,
+            description: categories.description,
+            type: categories.type,
+            goalValue: categories.goalValue,
+          })
+          .from(categories)
+          .where(and(eq(categories.type, type), eq(categories.userId, userId)))
+
+        return { categories: result }
+      },
+    )
 }

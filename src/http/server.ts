@@ -17,7 +17,9 @@ import { getMonthTransactionIncome } from './routes/metrics/get-month-transactio
 import { getMonthTransactionOutcome } from './routes/metrics/get-month-transaction-outcome'
 import { getMonthTransactionOutcomeCategory } from './routes/metrics/get-month-transaction-outcome-category'
 import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-month-transaction-outcome-type-of-expense'
+import { getMonthTransactionTotal } from './routes/metrics/get-month-transaction-total'
 import { createTransaction } from './routes/transactions/create-transaction'
+import { deleteTransaction } from './routes/transactions/delete-transaction'
 import { getTransactions } from './routes/transactions/get-transactions'
 import { createTypeOfExpense } from './routes/typesOfExpenses/create-type-of-expense'
 import { getTypesOfExpense } from './routes/typesOfExpenses/get-types-of-expenses'
@@ -42,8 +44,10 @@ app.register(createTypeOfExpense)
 app.register(getTypesOfExpense)
 app.register(createTransaction)
 app.register(getTransactions)
+app.register(deleteTransaction)
 app.register(getMonthTransactionIncome)
 app.register(getMonthTransactionOutcome)
+app.register(getMonthTransactionTotal)
 app.register(getMonthTransactionOutcomeCategory)
 app.register(getMonthTransactionOutcomeTypeOfExpense)
 

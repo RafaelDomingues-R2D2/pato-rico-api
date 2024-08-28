@@ -60,7 +60,7 @@ export async function createTransaction(app: FastifyInstance) {
             description,
             date,
             type,
-            value: String(value),
+            value,
             paymentForm,
             userId,
             categoryId,

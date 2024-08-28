@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
-import { decimal, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 import { users } from './users'
 
@@ -13,7 +13,7 @@ export const categories = pgTable('categories', {
   name: text('name').notNull(),
   description: text('description'),
   type: categoryType('type').notNull(),
-  goalValue: decimal('goal_value').notNull(),
+  goalValue: integer('goal_value').notNull(),
 
   userId: text('user_id').notNull(),
 

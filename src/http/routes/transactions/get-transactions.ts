@@ -1,6 +1,7 @@
-import { and, count, eq } from 'drizzle-orm'
+import { and, between, count, eq } from 'drizzle-orm'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { db } from '@/db/connection'
 import { categories, transactions, typesOfExpenses } from '@/db/schema'
@@ -12,17 +13,19 @@ export async function getTransactions(app: FastifyInstance) {
     .register(auth)
     .get(
       '/transactions',
-      // {
-      //   schema: {
-      //     querystring: z.object({
-      //       initialDate: z.string().optional(),
-      //       endDate: z.string().optional(),
-      //       pageIndex: z.number(),
-      //     }),
-      //   },
-      // },
-      async () => {
-        // const userId = await request.getCurrentUserId()
+      {
+        schema: {
+          querystring: z.object({
+            initialDate: z.string().optional(),
+            endDate: z.string().optional(),
+            pageIndex: z.string(),
+          }),
+        },
+      },
+      async (request) => {
+        const userId = await request.getCurrentUserId()
+
+        const { initialDate, endDate, pageIndex } = request.query
 
         const baseQuery = db
           .select({
@@ -44,11 +47,12 @@ export async function getTransactions(app: FastifyInstance) {
             eq(typesOfExpenses.id, transactions.typeOfExpenseId),
           )
           .where(
-            and(),
-            // initialDate && endDate
-            //   ? between(transactions.date, initialDate, endDate)
-            //   : undefined,
-            // eq(transactions.userId, userId),
+            and(
+              initialDate && endDate
+                ? between(transactions.date, initialDate, endDate)
+                : undefined,
+              eq(transactions.userId, userId),
+            ),
           )
 
         const [transactionsCount] = await db
@@ -56,14 +60,14 @@ export async function getTransactions(app: FastifyInstance) {
           .from(baseQuery.as('baseQuery'))
 
         const allTransactions = await baseQuery
-          // .offset(pageIndex * 10)
+          .offset(Number(pageIndex) * 10)
           .limit(10)
           .orderBy(transactions.date)
 
         const result = {
           transactions: allTransactions,
           meta: {
-            // pageIndex,
+            pageIndex,
             perPage: 10,
             totalCount: transactionsCount.count,
           },

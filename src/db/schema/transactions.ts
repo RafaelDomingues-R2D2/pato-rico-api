@@ -2,7 +2,7 @@ import { createId } from '@paralleldrive/cuid2'
 import { relations } from 'drizzle-orm'
 import {
   date,
-  decimal,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -32,7 +32,7 @@ export const transactions = pgTable('transactions', {
   name: text('name').notNull(),
   description: text('description'),
   date: date('date').notNull(),
-  value: decimal('value').notNull(),
+  value: integer('value').notNull(),
   type: transactionTypeEnum('type').notNull(),
   paymentForm: paymentFormEnum('payment_form'),
 

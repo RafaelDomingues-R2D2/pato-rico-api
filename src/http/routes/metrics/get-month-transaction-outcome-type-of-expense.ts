@@ -1,7 +1,8 @@
 import dayjs from 'dayjs'
-import { and, eq, gte, sum } from 'drizzle-orm'
+import { and, between, eq, gte, sum } from 'drizzle-orm'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { z } from 'zod'
 
 import { db } from '@/db/connection'
 import { transactions, typesOfExpenses } from '@/db/schema'
@@ -21,7 +22,17 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
     .register(auth)
     .get(
       '/metrics/month-transaction-outcome-type-of-expense',
+      {
+        schema: {
+          querystring: z.object({
+            from: z.string(),
+            to: z.string(),
+          }),
+        },
+      },
       async (request) => {
+        const { from, to } = request.query
+
         const today = dayjs()
         const lastMonth = today.subtract(0, 'month')
         const startOfLastMonth = lastMonth.startOf('month')
@@ -44,6 +55,7 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
               gte(transactions.createdAt, startOfLastMonth.toDate()),
               eq(transactions.type, 'OUTCOME'),
               eq(transactions.userId, userId),
+              between(transactions.date, from, to),
             ),
           )
           .groupBy(typesOfExpenses.name, typesOfExpenses.goalValue)

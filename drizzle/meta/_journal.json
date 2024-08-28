@@ -15,6 +15,13 @@
       "when": 1722556903798,
       "tag": "0001_orange_captain_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723923566755,
+      "tag": "0002_huge_sentinels",
+      "breakpoints": true
     }
   ]
 }
