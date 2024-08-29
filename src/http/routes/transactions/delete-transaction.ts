@@ -16,8 +16,6 @@ export async function deleteTransaction(app: FastifyInstance) {
     .register(auth)
     .delete<{ Params: Params }>('/transactions/:id', async (params, reply) => {
       const { id } = params.params
-      console.log('id ', id)
-      console.log('params ', params)
 
       await db.delete(transactions).where(eq(transactions.id, id))
 
