@@ -11,6 +11,14 @@ import { auth } from '@/http/middlewares/auth'
 interface getMonthTransactionOutcomeCategoryResponse {
   category: string
   amount: number
+  fill: string
+}
+interface ConfigItem {
+  label?: string
+}
+
+interface configMonthTransactionOutcomeCategoryResponse {
+  [key: string]: ConfigItem
 }
 
 export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
@@ -54,15 +62,28 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
           .groupBy(categories.name)
 
         const result: getMonthTransactionOutcomeCategoryResponse[] = []
+        const config: configMonthTransactionOutcomeCategoryResponse = {
+          [String('amount')]: {
+            label: 'amount',
+          },
+        }
 
+        let count = 1
         query.forEach((q) => {
           result.push({
             category: String(q.category),
-            amount: Number(q.amount),
+            amount: Number(q.amount) / 100,
+            fill: `hsl(var(--chart-${count}))`,
           })
+
+          config[String(q.category)] = {
+            label: String(q.category),
+          }
+
+          count++
         })
 
-        return result
+        return { result, config }
       },
     )
 }
