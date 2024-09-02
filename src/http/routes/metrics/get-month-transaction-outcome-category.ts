@@ -1,5 +1,4 @@
-import dayjs from 'dayjs'
-import { and, between, eq, gte, sum } from 'drizzle-orm'
+import { and, between, eq, sum } from 'drizzle-orm'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
@@ -38,11 +37,9 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
       async (request) => {
         const { from, to } = request.query
 
-        const today = dayjs()
-        const lastMonth = today.subtract(0, 'month')
-        const startOfLastMonth = lastMonth.startOf('month')
-
         const userId = await request.getCurrentUserId()
+
+        console.log('datas ', from, to)
 
         const query = await db
           .select({
@@ -53,7 +50,6 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
           .leftJoin(categories, eq(categories.id, transactions.categoryId))
           .where(
             and(
-              gte(transactions.createdAt, startOfLastMonth.toDate()),
               eq(transactions.type, 'OUTCOME'),
               eq(transactions.userId, userId),
               between(transactions.date, from, to),
@@ -67,6 +63,8 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
             label: 'amount',
           },
         }
+
+        console.log('query ', query)
 
         let count = 1
         query.forEach((q) => {
