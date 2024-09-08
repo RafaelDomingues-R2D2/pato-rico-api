@@ -16,7 +16,7 @@ import { getCategories } from './routes/categories/get-categories'
 import { getMonthTransactionIncome } from './routes/metrics/get-month-transaction-income'
 import { getMonthTransactionOutcome } from './routes/metrics/get-month-transaction-outcome'
 import { getMonthTransactionOutcomeCategory } from './routes/metrics/get-month-transaction-outcome-category'
-import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-month-transaction-outcome-reservation'
+import { getMonthTransactionOutcomeReservation } from './routes/metrics/get-month-transaction-outcome-reservation'
 import { getMonthTransactionTotal } from './routes/metrics/get-month-transaction-total'
 import { createReservation } from './routes/reservations/create-reservations'
 import { getReservations } from './routes/reservations/get-reservations'
@@ -49,7 +49,7 @@ app.register(getMonthTransactionIncome)
 app.register(getMonthTransactionOutcome)
 app.register(getMonthTransactionTotal)
 app.register(getMonthTransactionOutcomeCategory)
-app.register(getMonthTransactionOutcomeTypeOfExpense)
+app.register(getMonthTransactionOutcomeReservation)
 
 const port = Number(process.env.PORT) || 3333
 const address = '0.0.0.0'

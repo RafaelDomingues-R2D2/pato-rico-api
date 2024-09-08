@@ -7,13 +7,13 @@ import { db } from '@/db/connection'
 import { categories, reservations, transactions } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
-interface getMonthTransactionOutcomeTypeOfExpenseResponse {
+interface getMonthTransactionOutcomeReservationResponse {
   name: string
   valor: number
   meta: number
 }
 
-export async function getMonthTransactionOutcomeTypeOfExpense(
+export async function getMonthTransactionOutcomeReservation(
   app: FastifyInstance,
 ) {
   app
@@ -52,7 +52,7 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
           )
           .groupBy(reservations.name, reservations.goalValue)
 
-        const result: getMonthTransactionOutcomeTypeOfExpenseResponse[] = []
+        const result: getMonthTransactionOutcomeReservationResponse[] = []
 
         query.forEach((q) => {
           result.push({
