@@ -34,7 +34,6 @@ export async function createTransaction(app: FastifyInstance) {
             value: z.number(),
             paymentForm: z.nativeEnum(PaymentFormEnum).optional(),
             categoryId: z.string(),
-            typeOfExpenseId: z.string(),
           }),
         },
       },
@@ -48,7 +47,6 @@ export async function createTransaction(app: FastifyInstance) {
           value,
           paymentForm,
           categoryId,
-          typeOfExpenseId,
         } = request.body
 
         const userId = await request.getCurrentUserId()
@@ -64,7 +62,6 @@ export async function createTransaction(app: FastifyInstance) {
             paymentForm,
             userId,
             categoryId,
-            typeOfExpenseId,
           })
           .returning()
 

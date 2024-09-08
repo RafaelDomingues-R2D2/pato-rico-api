@@ -39,8 +39,6 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
 
         const userId = await request.getCurrentUserId()
 
-        console.log('datas ', from, to)
-
         const query = await db
           .select({
             category: categories.name,
@@ -63,8 +61,6 @@ export async function getMonthTransactionOutcomeCategory(app: FastifyInstance) {
             label: 'amount',
           },
         }
-
-        console.log('query ', query)
 
         let count = 1
         query.forEach((q) => {

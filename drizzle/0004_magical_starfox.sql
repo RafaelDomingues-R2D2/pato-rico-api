@@ -1,0 +1,1 @@
+ALTER TABLE "categories" ADD COLUMN "reservation_id" text NOT NULL;

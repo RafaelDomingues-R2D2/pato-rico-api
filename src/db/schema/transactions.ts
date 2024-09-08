@@ -10,7 +10,6 @@ import {
 } from 'drizzle-orm/pg-core'
 
 import { categories } from './categories'
-import { typesOfExpenses } from './typesOfExpenses'
 import { users } from './users'
 
 export const transactionTypeEnum = pgEnum('transaction_type', [
@@ -38,7 +37,6 @@ export const transactions = pgTable('transactions', {
 
   userId: text('user_id').notNull(),
   categoryId: text('category_id').notNull(),
-  typeOfExpenseId: text('type_of_expense_id').notNull(),
 
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
@@ -49,11 +47,6 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     fields: [transactions.categoryId],
     references: [categories.id],
     relationName: 'transactionCategory',
-  }),
-  typesOfexpenses: one(typesOfExpenses, {
-    fields: [transactions.typeOfExpenseId],
-    references: [typesOfExpenses.id],
-    relationName: 'transactionTypeOfExpense',
   }),
   users: one(users, {
     fields: [transactions.userId],

@@ -24,11 +24,13 @@ export async function createCategory(app: FastifyInstance) {
             description: z.string(),
             type: z.nativeEnum(CategoryType),
             goalValue: z.number(),
+            reservationId: z.string().optional(),
           }),
         },
       },
       async (request, reply) => {
-        const { name, description, type, goalValue } = request.body
+        const { name, description, type, goalValue, reservationId } =
+          request.body
 
         const userId = await request.getCurrentUserId()
 
@@ -38,8 +40,9 @@ export async function createCategory(app: FastifyInstance) {
             name,
             description: description ?? '',
             type,
-            goalValue: String(goalValue),
+            goalValue,
             userId,
+            reservationId,
           })
           .returning()
 

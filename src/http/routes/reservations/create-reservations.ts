@@ -3,15 +3,15 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { db } from '@/db/connection'
-import { typesOfExpenses } from '@/db/schema'
+import { reservations } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
-export async function createTypeOfExpense(app: FastifyInstance) {
+export async function createReservation(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/types-of-expense',
+      '/reservation',
       {
         schema: {
           body: z.object({
@@ -26,18 +26,18 @@ export async function createTypeOfExpense(app: FastifyInstance) {
 
         const userId = await request.getCurrentUserId()
 
-        const typeOfExpense = await db
-          .insert(typesOfExpenses)
+        const reservation = await db
+          .insert(reservations)
           .values({
             name,
             description: description ?? '',
-            goalValue: String(goalValue),
+            goalValue,
             userId,
           })
           .returning()
 
         return reply.status(201).send({
-          typeOfExpense,
+          reservation,
         })
       },
     )

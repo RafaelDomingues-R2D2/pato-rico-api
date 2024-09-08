@@ -16,13 +16,13 @@ import { getCategories } from './routes/categories/get-categories'
 import { getMonthTransactionIncome } from './routes/metrics/get-month-transaction-income'
 import { getMonthTransactionOutcome } from './routes/metrics/get-month-transaction-outcome'
 import { getMonthTransactionOutcomeCategory } from './routes/metrics/get-month-transaction-outcome-category'
-import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-month-transaction-outcome-type-of-expense'
+import { getMonthTransactionOutcomeTypeOfExpense } from './routes/metrics/get-month-transaction-outcome-reservation'
 import { getMonthTransactionTotal } from './routes/metrics/get-month-transaction-total'
+import { createReservation } from './routes/reservations/create-reservations'
+import { getReservations } from './routes/reservations/get-reservations'
 import { createTransaction } from './routes/transactions/create-transaction'
 import { deleteTransaction } from './routes/transactions/delete-transaction'
 import { getTransactions } from './routes/transactions/get-transactions'
-import { createTypeOfExpense } from './routes/typesOfExpenses/create-type-of-expense'
-import { getTypesOfExpense } from './routes/typesOfExpenses/get-types-of-expenses'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -40,8 +40,8 @@ app.register(authenticateWithPassword)
 app.register(getProfile)
 app.register(createCategory)
 app.register(getCategories)
-app.register(createTypeOfExpense)
-app.register(getTypesOfExpense)
+app.register(createReservation)
+app.register(getReservations)
 app.register(createTransaction)
 app.register(getTransactions)
 app.register(deleteTransaction)

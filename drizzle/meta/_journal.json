@@ -22,6 +22,34 @@
       "when": 1723923566755,
       "tag": "0002_huge_sentinels",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725734911071,
+      "tag": "0003_lowly_gunslinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1725735772772,
+      "tag": "0004_magical_starfox",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1725736222008,
+      "tag": "0005_mysterious_phantom_reporter",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725753578003,
+      "tag": "0006_fuzzy_reaper",
+      "breakpoints": true
     }
   ]
 }

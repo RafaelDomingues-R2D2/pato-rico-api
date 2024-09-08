@@ -4,7 +4,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { db } from '@/db/connection'
-import { categories, transactions, typesOfExpenses } from '@/db/schema'
+import { categories, reservations, transactions } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 export async function getTransactions(app: FastifyInstance) {
@@ -37,15 +37,12 @@ export async function getTransactions(app: FastifyInstance) {
             type: transactions.type,
             paymentForm: transactions.paymentForm,
             category: categories.name,
-            typeOfExpense: typesOfExpenses.name,
-            typeOfExpenseGoalValue: typesOfExpenses.goalValue,
+            typeOfExpense: reservations.name,
+            typeOfExpenseGoalValue: reservations.goalValue,
           })
           .from(transactions)
           .leftJoin(categories, eq(categories.id, transactions.categoryId))
-          .leftJoin(
-            typesOfExpenses,
-            eq(typesOfExpenses.id, transactions.typeOfExpenseId),
-          )
+          .leftJoin(reservations, eq(reservations.id, categories.reservationId))
           .where(
             and(
               initialDate && endDate

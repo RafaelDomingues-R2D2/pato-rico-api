@@ -4,13 +4,13 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { db } from '@/db/connection'
 import { auth } from '@/http/middlewares/auth'
 
-export async function getTypesOfExpense(app: FastifyInstance) {
+export async function getReservations(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .get('/types-of-expense', async () => {
-      const typesOfExpense = await db.query.typesOfExpenses.findMany()
+    .get('/reservation', async () => {
+      const reservation = await db.query.reservations.findMany()
 
-      return { typesOfExpense }
+      return { reservation }
     })
 }

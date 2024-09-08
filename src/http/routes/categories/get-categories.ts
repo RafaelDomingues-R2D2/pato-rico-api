@@ -4,7 +4,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { db } from '@/db/connection'
-import { categories } from '@/db/schema'
+import { categories, reservations } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 export async function getCategories(app: FastifyInstance) {
@@ -32,8 +32,10 @@ export async function getCategories(app: FastifyInstance) {
             description: categories.description,
             type: categories.type,
             goalValue: categories.goalValue,
+            reservationName: reservations.name,
           })
           .from(categories)
+          .leftJoin(reservations, eq(reservations.id, categories.reservationId))
           .where(and(eq(categories.type, type), eq(categories.userId, userId)))
 
         return { categories: result }

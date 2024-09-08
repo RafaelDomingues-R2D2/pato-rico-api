@@ -4,7 +4,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { db } from '@/db/connection'
-import { transactions, typesOfExpenses } from '@/db/schema'
+import { categories, reservations, transactions } from '@/db/schema'
 import { auth } from '@/http/middlewares/auth'
 
 interface getMonthTransactionOutcomeTypeOfExpenseResponse {
@@ -20,7 +20,7 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/metrics/month-transaction-outcome-type-of-expense',
+      '/metrics/month-transaction-outcome-reservation',
       {
         schema: {
           querystring: z.object({
@@ -36,15 +36,13 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
 
         const query = await db
           .select({
-            name: typesOfExpenses.name,
+            name: reservations.name,
             amount: sum(transactions.value),
-            goal: typesOfExpenses.goalValue,
+            goal: reservations.goalValue,
           })
           .from(transactions)
-          .leftJoin(
-            typesOfExpenses,
-            eq(typesOfExpenses.id, transactions.typeOfExpenseId),
-          )
+          .leftJoin(categories, eq(categories.id, transactions.categoryId))
+          .leftJoin(reservations, eq(reservations.id, categories.reservationId))
           .where(
             and(
               eq(transactions.type, 'OUTCOME'),
@@ -52,7 +50,7 @@ export async function getMonthTransactionOutcomeTypeOfExpense(
               between(transactions.date, from, to),
             ),
           )
-          .groupBy(typesOfExpenses.name, typesOfExpenses.goalValue)
+          .groupBy(reservations.name, reservations.goalValue)
 
         const result: getMonthTransactionOutcomeTypeOfExpenseResponse[] = []
 

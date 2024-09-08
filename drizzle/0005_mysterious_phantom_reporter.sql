@@ -1,0 +1,1 @@
+ALTER TABLE "categories" ALTER COLUMN "reservation_id" DROP NOT NULL;

@@ -4,7 +4,7 @@ import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 import { users } from './users'
 
-export const typesOfExpenses = pgTable('typesOfExpenses', {
+export const reservations = pgTable('reservations', {
   id: text('id')
     .$defaultFn(() => createId())
     .primaryKey(),
@@ -18,13 +18,10 @@ export const typesOfExpenses = pgTable('typesOfExpenses', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
-export const typesOfExpensesRelations = relations(
-  typesOfExpenses,
-  ({ one }) => ({
-    users: one(users, {
-      fields: [typesOfExpenses.userId],
-      references: [users.id],
-      relationName: 'typesOfExpensesUser',
-    }),
+export const reservationsRelations = relations(reservations, ({ one }) => ({
+  users: one(users, {
+    fields: [reservations.userId],
+    references: [users.id],
+    relationName: 'reservationsUser',
   }),
-)
+}))
