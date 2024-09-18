@@ -9,7 +9,7 @@ import { auth } from '@/http/middlewares/auth'
 
 interface getMonthTransactionOutcomeReservationResponse {
   name: string
-  valor: number
+  saida: number
   meta: number
 }
 
@@ -57,7 +57,7 @@ export async function getMonthTransactionOutcomeReservation(
         query.forEach((q) => {
           result.push({
             name: String(q.name),
-            valor: Number(q.amount) / 100,
+            saida: Number(q.amount) / 100,
             meta: Number(q.goal) / 100,
           })
         })
