@@ -47,6 +47,8 @@ export async function getMonthTransactionOutcomeReservation(
             and(
               eq(transactions.type, 'OUTCOME'),
               eq(transactions.userId, userId),
+              eq(reservations.userId, userId),
+              eq(categories.userId, userId),
               between(transactions.date, from, to),
             ),
           )
