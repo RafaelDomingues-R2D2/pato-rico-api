@@ -37,8 +37,8 @@ export async function getTransactions(app: FastifyInstance) {
             type: transactions.type,
             paymentForm: transactions.paymentForm,
             category: categories.name,
-            typeOfExpense: reservations.name,
-            typeOfExpenseGoalValue: reservations.goalValue,
+            reservation: reservations.name,
+            reservationGoalValue: reservations.goalValue,
           })
           .from(transactions)
           .leftJoin(categories, eq(categories.id, transactions.categoryId))
@@ -59,7 +59,12 @@ export async function getTransactions(app: FastifyInstance) {
         const allTransactions = await baseQuery
           .offset(Number(pageIndex) * 10)
           .limit(10)
-          .orderBy(transactions.date)
+          .groupBy(
+            reservations.name,
+            categories.name,
+            transactions.id,
+            reservations.goalValue,
+          )
 
         const result = {
           transactions: allTransactions,

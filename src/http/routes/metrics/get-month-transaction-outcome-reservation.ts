@@ -58,7 +58,7 @@ export async function getMonthTransactionOutcomeReservation(
           result.push({
             name: String(q.name),
             saida: Number(q.amount) / 100,
-            meta: Number(q.goal) / 100,
+            meta: Number(q.goal),
           })
         })
 
