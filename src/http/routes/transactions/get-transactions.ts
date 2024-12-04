@@ -1,4 +1,4 @@
-import { and, between, count, eq } from 'drizzle-orm'
+import { and, between, count, desc, eq } from 'drizzle-orm'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
@@ -19,13 +19,14 @@ export async function getTransactions(app: FastifyInstance) {
             initialDate: z.string().optional(),
             endDate: z.string().optional(),
             pageIndex: z.string(),
+            categoryId: z.string().optional(),
           }),
         },
       },
       async (request) => {
         const userId = await request.getCurrentUserId()
 
-        const { initialDate, endDate, pageIndex } = request.query
+        const { initialDate, endDate, pageIndex, categoryId } = request.query
 
         const baseQuery = db
           .select({
@@ -49,6 +50,7 @@ export async function getTransactions(app: FastifyInstance) {
                 ? between(transactions.date, initialDate, endDate)
                 : undefined,
               eq(transactions.userId, userId),
+              categoryId ? eq(transactions.categoryId, categoryId) : undefined,
             ),
           )
 
@@ -59,12 +61,7 @@ export async function getTransactions(app: FastifyInstance) {
         const allTransactions = await baseQuery
           .offset(Number(pageIndex) * 10)
           .limit(10)
-          .groupBy(
-            reservations.name,
-            categories.name,
-            transactions.id,
-            reservations.goalValue,
-          )
+          .orderBy(desc(transactions.createdAt))
 
         const result = {
           transactions: allTransactions,

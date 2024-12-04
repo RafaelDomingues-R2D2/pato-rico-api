@@ -2,6 +2,7 @@
   "name": "pato-rico-api",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "dev": "tsx watch --env-file .env src/http/server.ts",
     "start": "node build/http/server.js",

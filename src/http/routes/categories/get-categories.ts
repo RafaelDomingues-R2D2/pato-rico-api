@@ -16,7 +16,7 @@ export async function getCategories(app: FastifyInstance) {
       {
         schema: {
           querystring: z.object({
-            type: z.enum(['INCOME', 'OUTCOME']),
+            type: z.enum(['INCOME', 'OUTCOME']).optional(),
           }),
         },
       },
@@ -36,7 +36,13 @@ export async function getCategories(app: FastifyInstance) {
           })
           .from(categories)
           .leftJoin(reservations, eq(reservations.id, categories.reservationId))
-          .where(and(eq(categories.type, type), eq(categories.userId, userId)))
+          .where(
+            and(
+              type ? eq(categories.type, type) : undefined,
+              eq(categories.userId, userId),
+            ),
+          )
+          .orderBy(categories.name)
 
         return { categories: result }
       },
