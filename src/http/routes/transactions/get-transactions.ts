@@ -20,13 +20,15 @@ export async function getTransactions(app: FastifyInstance) {
             endDate: z.string().optional(),
             pageIndex: z.string(),
             categoryId: z.string().optional(),
+            reservationId: z.string().optional(),
           }),
         },
       },
       async (request) => {
         const userId = await request.getCurrentUserId()
 
-        const { initialDate, endDate, pageIndex, categoryId } = request.query
+        const { initialDate, endDate, pageIndex, categoryId, reservationId } =
+          request.query
 
         const baseQuery = db
           .select({
@@ -51,6 +53,9 @@ export async function getTransactions(app: FastifyInstance) {
                 : undefined,
               eq(transactions.userId, userId),
               categoryId ? eq(transactions.categoryId, categoryId) : undefined,
+              reservationId
+                ? eq(categories.reservationId, reservationId)
+                : undefined,
             ),
           )
 

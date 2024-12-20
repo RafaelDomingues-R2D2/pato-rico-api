@@ -10,7 +10,7 @@ export async function getReservations(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .get('/reservation', async (request) => {
+    .get('/reservations', async (request) => {
       const userId = await request.getCurrentUserId()
       const result = await db
         .select()

@@ -11,7 +11,7 @@ export async function createReservation(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/reservation',
+      '/reservations',
       {
         schema: {
           body: z.object({
